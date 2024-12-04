@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Samplepage } from "./pages/Samplepage";
+import { SuperAdminPage } from "./pages/SuperAdmin/SuperAdminPage";
 
 function App() {
  return(
   <div>
     <Router>
       <Routes>
-        <Route path="/" element={<Samplepage/>} ></Route>
+        <Route path="/superAdminDashboard" element={<SuperAdminPage/>} ></Route>
         {/* <Route path="/superadminDashboard" element={} ></Route> */}
 
       </Routes>
