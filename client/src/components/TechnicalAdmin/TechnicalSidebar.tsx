@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const Sidebar = () => {
+const TechnicalSidebar = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [active, setActive] = useState(null); // Active state to highlight selected options
 
@@ -16,13 +17,13 @@ const Sidebar = () => {
         <div className="text-2xl font-semibold text-center text-gray-200">Admin</div>
 
         {/* Dashboard Button */}
-        <button 
+        <Link to='/technicalAdminDashboard'><button 
           className={`w-full text-left py-3 px-4 rounded-lg transition-all duration-200 ease-in-out 
             ${active === 'Dashboard' ? 'bg-indigo-900' : 'hover:bg-indigo-900'}`}
           onClick={() => handleClick('Dashboard')}
         >
           Dashboard
-        </button>
+        </button></Link>
 
         {/* Categories Dropdown */}
         <div>
@@ -39,8 +40,8 @@ const Sidebar = () => {
           {showCategories && (
             <div className="bg-indigo-800 mt-2 rounded-lg shadow-lg transition-all duration-200">
               <ul>
-                <li className="py-2 px-5 hover:bg-indigo-600 cursor-pointer">List Categories</li>
-                <li className="py-2 px-5 hover:bg-indigo-600 cursor-pointer">Create Category</li>
+                <Link to ='/technicalAdmin'><li className="py-2 px-5 hover:bg-indigo-600 cursor-pointer">Create Category</li></Link>
+                <Link to ='/technicalcategorylist'> <li className="py-2 px-5 hover:bg-indigo-600 cursor-pointer">List Categories</li></Link>
               </ul>
             </div>
           )}
@@ -58,4 +59,4 @@ const Sidebar = () => {
   );
 }
 
-export default Sidebar;
+export default TechnicalSidebar;
