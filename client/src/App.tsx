@@ -4,6 +4,7 @@ import TechnicalAdmin from "./pages/TechnicalAdmin/TechnicalAdmin";
 import TechnicalCreateCategory from "./pages/TechnicalAdmin/TechnicalCreateCategory";
 import TechnicalDashboard from "./pages/TechnicalAdmin/TechnicalDashboard";
 import TechnicalCategoryList from "./pages/TechnicalAdmin/TechnicalCategoryList";
+import CategoryForm from "./components/TechnicalAdmin/TechnicalCategoryForm";
 
 function App() {
  return(
@@ -14,6 +15,7 @@ function App() {
         <Route path="/technicalAdmin" element={<TechnicalAdmin/>} ></Route>
         <Route path="/technicalAdminDashboard" element={<TechnicalDashboard/>} ></Route>
         <Route path="/technicalcategorylist" element={<TechnicalCategoryList/>} ></Route>
+        <Route path="/category/:id" element={<CategoryForm />} />
 
       </Routes>
     </Router>

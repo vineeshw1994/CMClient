@@ -317,13 +317,38 @@ const TechnicalCreateCategory = () => {
   //   setCurrentStep(2); // Move to the next step where values are entered
   // };
 
+  // const handleSubmit = async () => {
+  //   const metadataObject = {
+  //     category,
+  //     subcategory,
+  //     columns,
+  //     columnValues, // Include the column values in the metadata object
+  //   };
+  //   try {
+  //     // Send data to backend API
+  //     const response = await axios.post('http://localhost:4000/api/teachnical/saveCategory', metadataObject);
+  //     console.log('Metadata saved:', response.data); // Handle the response as needed
+  //     setMetadata(response.data); // Optionally set the metadata to display it
+  //   } catch (error) {
+  //     console.error('Error saving metadata:', error);
+  //   }
+  // };
+
   const handleSubmit = async () => {
+    // Construct the column mapping from selected columns and their values
+    const columnMapping = columns.map((column) => {
+      return {
+        [column]: columnValues[column] ? JSON.parse(columnValues[column]) : []
+      };
+    });
+  
     const metadataObject = {
       category,
       subcategory,
-      columns,
-      columnValues, // Include the column values in the metadata object
+      // columns,
+      columnMapping, // Constructed columnMapping object
     };
+  
     try {
       // Send data to backend API
       const response = await axios.post('http://localhost:4000/api/teachnical/saveCategory', metadataObject);
@@ -333,7 +358,6 @@ const TechnicalCreateCategory = () => {
       console.error('Error saving metadata:', error);
     }
   };
-
   return (
     <div className="bg-gray-900 text-white min-h-screen flex justify-center items-center py-12 px-6">
       <div className="max-w-4xl w-full p-8 bg-gray-800 rounded-xl shadow-lg space-y-8">
