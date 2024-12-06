@@ -222,7 +222,7 @@ function CategoryForm() {
 
   // Fetch category data and column mapping from API
   useEffect(() => {
-    axios.get(`http://localhost:4000/api/teachnical/getCategoryColumns/${id}`)
+    axios.get(`http://localhost:3000/api/teachnical/getCategoryColumns/${id}`)
       .then((response) => {
         let columnData = [];
         // Check if columnMapping is a string and parse it, otherwise use it directly
@@ -291,7 +291,7 @@ function CategoryForm() {
       return acc;
     }, {});
     // Send the data to the backend
-    axios.post('http://localhost:4000/api/teachnical/saveData', {
+    axios.post('http://localhost:3000/api/teachnical/saveData', {
       categoryId: id,
       data: formattedData,
     })
