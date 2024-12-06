@@ -1,5 +1,5 @@
 import React from 'react'
-import { SampleComponent } from '../components/SampleComponent'
+// import { SampleComponent } from '../components/SampleComponent'
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer/Footer'
 
@@ -13,7 +13,7 @@ export const Samplepage = () => {
     helloo
     </h1>
 <Navbar/>
-    <SampleComponent/>
+    {/* <SampleComponent/> */}
 <Footer/>
     </div>
   )
