@@ -1,10 +1,10 @@
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import TechnicalCreateCategory from './TechnicalCreateCategory';
 import TechnicalSidebar from '../../components/TechnicalAdmin/TechnicalSidebar';
+import TechnicalCategoryListTable from '../../components/TechnicalAdmin/TechnicalCategoryList';
 
-function TechnicalAdmin() {
+function TechnicalCategoryList() {
   return (
     <div className="flex flex-col bg-gray-900 min-h-screen">
       {/* Navbar */}
@@ -19,7 +19,7 @@ function TechnicalAdmin() {
 
         {/* Technical Create Category Section - takes remaining space */}
         <div className="flex-1 p-6 overflow-auto bg-gray-900">
-          <TechnicalCreateCategory />
+          <TechnicalCategoryListTable />
         </div>
       </div>
 
@@ -29,4 +29,4 @@ function TechnicalAdmin() {
   );
 }
 
-export default TechnicalAdmin;
+export default TechnicalCategoryList;
