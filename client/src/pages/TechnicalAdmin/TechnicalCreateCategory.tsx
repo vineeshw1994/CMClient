@@ -338,7 +338,7 @@ const TechnicalCreateCategory = () => {
     // Construct the column mapping from selected columns and their values
     const columnMapping = columns.map((column) => {
       return {
-        [column]: columnValues[column] ? JSON.parse(columnValues[column]) : []
+        [column]: columnValues[column] ? JSON.parse(columnValues[column]) : {}
       };
     });
   
@@ -351,7 +351,7 @@ const TechnicalCreateCategory = () => {
   
     try {
       // Send data to backend API
-      const response = await axios.post('http://localhost:3000/api/teachnical/saveCategory', metadataObject);
+      const response = await axios.post('http://localhost:4000/api/teachnical/saveCategory', metadataObject);
       console.log('Metadata saved:', response.data); // Handle the response as needed
       setMetadata(response.data); // Optionally set the metadata to display it
     } catch (error) {
