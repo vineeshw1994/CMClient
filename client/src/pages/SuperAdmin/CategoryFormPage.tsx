@@ -1,10 +1,9 @@
-import React from 'react';
+import React from 'react'
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/Navbar/Navbar';
-import CreateCategory from '../../components/SuperAdmin/CreateCategory';
-import Footer from '../../components/Footer/Footer';
+import SpaCategoryForm from '../../components/SuperAdmin/SpaCategoryForm';
 
-export const CreateCategoryPage = () => {
+export const CategoryFormPage = () => {
   return (
     <>
     <div className="flex flex-col h-screen">
@@ -23,12 +22,17 @@ export const CreateCategoryPage = () => {
         <div className="flex-1 p-8 mt-4 lg:mt-0 bg-gray-900 text-white">
 
           <h1 className="text-3xl font-semibold underline mb-4">""</h1>
-          <CreateCategory />
+          <SpaCategoryForm/>
         </div>
       </div>
 
       {/* <Footer/> */}
     </div>
     </>
-  );
-};
+  )
+}
+
+
+
+
+

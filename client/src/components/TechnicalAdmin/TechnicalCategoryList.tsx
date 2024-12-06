@@ -76,7 +76,7 @@ function TechnicalCategoryListTable() {
 
   // Fetch data from backend when component mounts
   useEffect(() => {
-    axios.get('http://localhost:4000/api/teachnical/getCategories')
+    axios.get('http://localhost:3000/api/teachnical/getCategories')
       .then((response) => {
         console.log('response.data', response.data);
         

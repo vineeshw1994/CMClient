@@ -7,6 +7,9 @@ import TechnicalCreateCategory from "./pages/TechnicalAdmin/TechnicalCreateCateg
 import TechnicalDashboard from "./pages/TechnicalAdmin/TechnicalDashboard";
 import TechnicalCategoryList from "./pages/TechnicalAdmin/TechnicalCategoryList";
 import CategoryForm from "./components/TechnicalAdmin/TechnicalCategoryForm";
+import { ListMetaCategoryPage } from "./pages/SuperAdmin/ListMetaCategoryPage";
+import SpaCategoryForm from "./components/SuperAdmin/SpaCategoryForm";
+import { CategoryFormPage } from "./pages/SuperAdmin/CategoryFormPage";
 
 function App() {
  return(
@@ -15,6 +18,9 @@ function App() {
       <Routes>
         <Route path="/superAdminDashboard" element={<SuperAdminPage/>} ></Route>
         <Route path="/SpaCreateCategory" element={<CreateCategoryPage/>} ></Route>
+        <Route path="/SpaListCategory" element={<ListMetaCategoryPage/>} ></Route>
+         <Route path="/spaCategory/:id" element={<CategoryFormPage/>} ></Route>
+
         
         <Route path="/technicalAdmin" element={<TechnicalAdmin/>} ></Route>
         <Route path="/technicalAdminDashboard" element={<TechnicalDashboard/>} ></Route>
