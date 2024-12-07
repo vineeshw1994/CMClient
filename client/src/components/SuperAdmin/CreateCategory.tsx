@@ -1,112 +1,159 @@
-import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 
-interface Column {
-  column: string;
-  selected: boolean;
-}
+import { useNavigate } from 'react-router-dom';
 
-export const CreateCategory: React.FC = () => {
-  const [category, setCategory] = useState<string>('');
-  const [subcategory, setSubcategory] = useState<string>('');
-  const [columns, setColumns] = useState<boolean[]>(new Array(30).fill(false)); // Columns as an array of booleans
+const CreateCategory = () => {
+  const navigate = useNavigate();
+  const [category, setCategory] = useState('');
+  const [subcategory, setSubcategory] = useState('');
+  const [columns, setColumns] = useState([]); // Store selected columns
+  const [currentStep, setCurrentStep] = useState(1); // Track the step (1 = column selection, 2 = value input)
+  const [columnValues, setColumnValues] = useState({}); // Store values for selected columns
+  const [metadata, setMetadata] = useState(null);
 
-  const handleCategoryChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const columnsList = Array.from({ length: 30 }, (_, index) => `Column_${index + 1}`);
+
+  const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    setSubcategory(''); // Reset subcategory when category changes
   };
 
-  const handleSubcategoryChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSubcategory(e.target.value);
+  const handleColumnSelection = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setColumns((prev) => [...prev, value]);
+    } else {
+      setColumns(columns.filter((column) => column !== value));
+    }
   };
 
-  const handleCheckboxChange = (index: number): void => {
-    const newColumns = [...columns];
-    newColumns[index] = !newColumns[index]; // Toggle checkbox value
-    setColumns(newColumns);
+  const handleColumnValueChange = (e, column) => {
+    setColumnValues((prev) => ({
+      ...prev,
+      [column]: e.target.value, // Update the value for the specific column
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // Construct the column mapping from selected columns and their values
+    const columnMapping = columns.map((column) => {
+      return {
+        [column]: columnValues[column] ? JSON.parse(columnValues[column]) : {}// Use empty string if no value is provided
+      };
+    });
 
-    const data = {
+    const metadataObject = {
       category,
       subcategory,
-      columns: columns.map((checked, index) => ({
-        column: `Column ${index + 1}`,
-        selected: checked,
-      })),
+      columnMapping, // Constructed columnMapping object
     };
 
     try {
-      const response = await axios.post('/api/category/create', data);
-      console.log('Response:', response.data);
+      // Send data to backend API
+      const response = await axios.post('http://localhost:3000/api/superAdmin/saveCategory', metadataObject);
+    
+      navigate('/SpaListCategory');
+      console.log('Metadata saved:', response.data); // Handle the response as needed
+
+      setMetadata(response.data); // Optionally set the metadata to display it
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error saving metadata:', error);
     }
   };
 
   return (
-    <div className="min-h-80   bg-gray-900 text-white flex items-center justify-center py-8">
-      <div className=" w-full bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div className="min-h-80 bg-gray-900 text-white flex items-center justify-center py-8">
+      <div className="w-full bg-gray-800 p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-semibold text-center mb-6">Create Category</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Category Input */}
-          <div className="flex items-center space-x-4 mb-4">
-            <label htmlFor="category" className="text-lg">Category</label>
-            <input
-              type="text"
-              id="category"
-              value={category}
-              onChange={handleCategoryChange}
-              placeholder="Enter category name"
-              className="p-2 border border-gray-700 text-gray-700 rounded-md w-full"
-              required
-            />
-          </div>
+        {/* Category Input */}
+        <div className="flex items-center space-x-4 mb-4">
+          <label htmlFor="category" className="text-lg">Category</label>
+          <input
+            type="text"
+            id="category"
+            value={category}
+            onChange={handleCategoryChange}
+            placeholder="Enter category name"
+            className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          />
+        </div>
 
-          {/* Subcategory Input */}
-          <div className="flex items-center space-x-4 mb-4">
-            <label htmlFor="subcategory" className="text-lg mb-2">Subcategory</label>
-            <input
-              type="text"
-              id="subcategory"
-              value={subcategory}
-              onChange={handleSubcategoryChange}
-              placeholder="Enter subcategory name (optional)"
-              className="p-2 border border-gray-700 text-gray-700 rounded-md w-full"
-            />
-          </div>
+        {/* Subcategory Input */}
+        <div className="flex items-center space-x-4 mb-4">
+          <label htmlFor="subcategory" className="text-lg mb-2">Subcategory</label>
+          <input
+            type="text"
+            id="subcategory"
+            value={subcategory}
+            onChange={(e) => setSubcategory(e.target.value)}
+            placeholder="Enter subcategory (optional)"
+            className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          />
+        </div>
 
-          {/* Columns Section */}
-          <div>
-            <label className="text-lg mb-2">Columns</label>
-            <div className="grid grid-cols-5 gap-4">
-              {columns.slice(0, 30).map((checked, index) => (
-                <div key={index} className="flex items-center">
+        {/* Columns Section */}
+        {currentStep === 1 && (
+          <div className="space-y-4">
+            <label className="block text-lg text-gray-300">Select Columns</label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {columnsList.map((column) => (
+                <div key={column} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    checked={checked}
-                    onChange={() => handleCheckboxChange(index)}
-                    className="mr-2 w-5 h-5 text-blue-600 border-gray-700 focus:ring-blue-500 focus:ring-2"
+                    id={column}
+                    value={column}
+                    onChange={handleColumnSelection}
+                    className="h-5 w-5 text-blue-500 border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 transition-all"
                   />
-                  <label>Column {index + 1}</label>
+                  <label htmlFor={column} className="text-gray-300">{column}</label>
                 </div>
               ))}
             </div>
           </div>
+        )}
 
-          {/* Submit Button */}
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="py-3 px-8 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Submit
-            </button>
+        {/* Step 2: Enter Values for Selected Columns */}
+        {currentStep === 2 && columns.length > 0 && (
+          <div className="space-y-4">
+            <label className="block text-lg text-gray-300">Enter Values for Selected Columns</label>
+            {columns.map((column) => (
+              <div key={column} className="flex flex-col space-y-2">
+                <label htmlFor={column} className="text-gray-300">{column}</label>
+                <input
+                  type="text"
+                  id={column}
+                  value={columnValues[column] || ''}
+                  onChange={(e) => handleColumnValueChange(e, column)}
+                  placeholder={`Enter value for ${column}`}
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+              </div>
+            ))}
           </div>
-        </form>
+        )}
+
+        {/* Submit Button */}
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            Save Metadata
+          </button>
+        </div>
+
+        {/* Display Metadata */}
+        {metadata && (
+          <div className="mt-8 p-4 bg-gray-700 border border-gray-600 rounded-md">
+            <h3 className="text-xl font-semibold text-gray-100">Metadata</h3>
+            <pre className="text-gray-300">{JSON.stringify(metadata, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+export default CreateCategory;
