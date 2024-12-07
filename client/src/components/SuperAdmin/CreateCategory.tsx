@@ -10,6 +10,7 @@ const CreateCategory = () => {
   const [currentStep, setCurrentStep] = useState(1); // Track the step (1 = column selection, 2 = value input)
   const [columnValues, setColumnValues] = useState({}); // Store values for selected columns
   const [columnList, setColumnList] = useState([]); // Store columns dynamically from backend
+  const [errorMessage, setErrorMessage] = useState(''); 
 
   useEffect(() => {
     // Fetch columns dynamically from the backend
@@ -46,7 +47,9 @@ const CreateCategory = () => {
     }));
   };
 
-  const handleSubmit = () => {
+   const handleSubmit = () => {
+   
+
     // Construct the column mapping from selected columns and their values
     const columnMapping = columns.map((column) => {
       return {
@@ -60,18 +63,21 @@ const CreateCategory = () => {
       columnMapping, // Constructed columnMapping object
     };
 
-    // Save the metadata to localStorage
+    // Save the metadata to localStorage if category doesn't already exist
     if (category) {
       localStorage.setItem(category, JSON.stringify(metadataObject)); // Save the metadata object using the category name as the key
       console.log('Metadata saved to localStorage:', metadataObject);
-      navigate('/SpaListCategory'); // Navigate to the next page after saving the data
+      // You can now optionally navigate, or perform any other actions after saving
+      navigate('/SpaListCategory');
     } else {
       alert('Please provide a category name.');
     }
   };
+   
 
   return (
     <div className="min-h-80 bg-gray-900 text-white flex items-center justify-center py-8">
+       
       <div className="w-full bg-gray-800 p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-semibold text-center mb-6">Create Category</h2>
 
