@@ -66,7 +66,7 @@ const CreateCategory = () => {
     // Save the metadata to localStorage if category doesn't already exist
     try {
       // Send the metadata to the backend to be appended to metadata.json
-      const response = await axios.post('http://localhost:3000/api/updateMetadata', metadataObject, {
+      const response = await axios.post('http://localhost:3000/api/superAdmin/updateMetadata', metadataObject, {
         withCredentials: true,
       });
   

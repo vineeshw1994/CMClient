@@ -1,52 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const ListMetaCard = () => {
-  const [categories, setCategories] = useState([]); // Store categories fetched from localStorage
+  const [categories, setCategories] = useState([]); // Store categories fetched from backend
+  const [error, setError] = useState(null); // Store any error that occurs during the fetch
 
+  // Fetch categories from backend on mount
   useEffect(() => {
-    // Fetch categories from localStorage
-    const fetchCategoriesFromLocalStorage = () => {
-      const keys = Object.keys(localStorage); // Get all keys from localStorage
-      console.log("Keys from localStorage:", keys); // Log keys from localStorage for debugging
+    const fetchCategoriesFromBackend = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/superAdmin/listMetaData'); // Fetch metadata from backend API
+        const storedCategories = response.data; // Data from backend (metadata.json)
 
-      const storedCategories = keys
-        .filter((key) => localStorage.getItem(key)) // Check if category exists in localStorage
-        .map((key) => {
-          const categoryData = JSON.parse(localStorage.getItem(key)); // Parse the stored category data
-          console.log("Category data for key:", key, categoryData); // Log each category's data
+        console.log("Fetched categories:", storedCategories); // Log the fetched data for debugging
 
+        // Map the categories from the fetched data
+        const categoriesList = storedCategories.map((category, index) => {
           return {
-            id: key, // Use the category name as the unique ID
-            category: categoryData.category,
-            subCategory: categoryData.subcategory,
-            columnMapping: categoryData.columnMapping,
+            id: index, // or use category.id if available in metadata
+            category: category.category,
+            subCategory: category.subcategory,
+            columnMapping: category.columnMapping,
           };
         });
 
-      console.log("Stored categories:", storedCategories); // Log the final array of categories
-
-      setCategories(storedCategories); // Set the categories state with the fetched data
+        setCategories(categoriesList); // Set the fetched data to state
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError('Failed to fetch categories'); // Set error message if fetch fails
+      }
     };
 
-    fetchCategoriesFromLocalStorage();
+    fetchCategoriesFromBackend();
   }, []); // Empty dependency array ensures it runs once when the component mounts
 
   const parseColumnMapping = (columnMapping) => {
-    // If columnMapping is an array, return it as is
+    // Safely parse columnMapping if it's a JSON string or array
     if (Array.isArray(columnMapping)) {
       return { columnMapping };
     }
 
     try {
-      // If it's a JSON string, try to parse it
       console.log("Parsing columnMapping:", columnMapping); // Log the columnMapping before parsing
-      return JSON.parse(columnMapping);
+      return JSON.parse(columnMapping); // Parse columnMapping if it's a JSON string
     } catch (error) {
       console.error('Error parsing columnMapping:', error);
-      return { columnMapping: [] }; // Fallback to empty array if parsing fails
+      return { columnMapping: [] }; // Return empty array if parsing fails
     }
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <>
@@ -60,8 +66,8 @@ const ListMetaCard = () => {
           return (
             <div key={category.id} className="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col">
               <Link to={`/spaCategory/${category.id}`}>
-                <h2 className="text-xl font-semibold mb-3 text-gray-200">Category:{category.category}</h2>
-                <h3 className="text-md text-gray-400 mb-4">Subcategory:{category.subCategory}</h3>
+                <h2 className="text-xl font-semibold mb-3 text-gray-200">Category: {category.category}</h2>
+                <h3 className="text-md text-gray-400 mb-4">Subcategory: {category.subCategory}</h3>
 
                 {/* Display column mapping */}
                 <div>
