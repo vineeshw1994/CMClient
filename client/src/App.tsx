@@ -12,6 +12,7 @@ import BusinessCategoryForm from "./components/BusinessAdmin/BusinessAddValue";
 import { ListMetaCategoryPage } from "./pages/SuperAdmin/ListMetaCategoryPage";
 import SpaCategoryForm from "./components/SuperAdmin/SpaCategoryForm";
 import { CategoryFormPage } from "./pages/SuperAdmin/CategoryFormPage";
+import Login from "./pages/Authentication/Login";
 
 function App() {
  return(
@@ -19,7 +20,7 @@ function App() {
     <Router>
       <Routes>
 
-        
+        <Route path="/login" element={<Login/>}></Route>
 
         <Route path="/superAdminDashboard" element={<SuperAdminPage/>} ></Route>
         <Route path="/SpaCreateCategory" element={<CreateCategoryPage/>} ></Route>
