@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios'; // Import AxiosError
 import { useAuth } from '../../providers/auth-provider';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 // Define types for form data
 interface FormData {
@@ -15,7 +16,7 @@ const Login: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
-    role: '',
+    role: 'SuperAdmin',
   });
   const navigate = useNavigate();
 
@@ -35,13 +36,16 @@ const Login: React.FC = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/authentication/login', formData, { withCredentials: true });
       console.log('Login success:', response.data);
-      
+
       if (response && response.data) {
         const { user } = response.data;
         login(user);
 
         const roleToRouteMapping: Record<string, string> = {
-          superAdmin: '/superAdminDashboard',
+          SuperAdmin: '/superAdminDashboard',
+          BusinessUser: "/",
+          BusinessAdmin: "/businessAdmin",
+          TechnicalAdmin: "/technicalAdminDashboard",
         };
 
         const userRole = response.data.user.role;
@@ -117,7 +121,7 @@ const Login: React.FC = () => {
                 <option value="SuperAdmin">SuperAdmin</option>
                 <option value="TechnicalAdmin">TechnicalAdmin</option>
                 <option value="BusinessAdmin">Business Admin</option>
-                <option value="User">User</option>
+                <option value="BusinessUser">User</option>
               </select>
             </div>
 
@@ -130,6 +134,16 @@ const Login: React.FC = () => {
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
+
+          {/* Sign Up Link */}
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-400">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-blue-500 hover:text-blue-600">
+                Sign Up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
