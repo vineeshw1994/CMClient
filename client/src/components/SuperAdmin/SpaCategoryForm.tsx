@@ -65,7 +65,7 @@ function SpaCategoryForm() {
       subcategory: subcategory, // Include the subcategory name
       columnMapping: formattedData, // Include the column mapping (columns with their names)
     };
-    console.log('data',finalData)
+    
 
     // Update the category data in localStorage
     localStorage.setItem(id, JSON.stringify({ ...categoryData, columnMapping: finalData.columnMapping }));

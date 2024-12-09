@@ -18,6 +18,9 @@ function App() {
   <div>
     <Router>
       <Routes>
+
+        
+
         <Route path="/superAdminDashboard" element={<SuperAdminPage/>} ></Route>
         <Route path="/SpaCreateCategory" element={<CreateCategoryPage/>} ></Route>
         <Route path="/SpaListCategory" element={<ListMetaCategoryPage/>} ></Route>
