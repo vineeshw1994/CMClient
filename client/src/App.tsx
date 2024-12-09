@@ -12,6 +12,7 @@ import BusinessCategoryForm from "./components/BusinessAdmin/BusinessAddValue";
 import { ListMetaCategoryPage } from "./pages/SuperAdmin/ListMetaCategoryPage";
 import SpaCategoryForm from "./components/SuperAdmin/SpaCategoryForm";
 import { CategoryFormPage } from "./pages/SuperAdmin/CategoryFormPage";
+import Signup from "./pages/Auth/Signup";
 
 function App() {
  return(
@@ -32,6 +33,10 @@ function App() {
 
         <Route path="/businessAdmin" element={<BusinessAdmin />} />
         <Route path="/businessCategory/:id" element={<BusinessCategoryForm />} />
+
+
+
+        <Route path="/signup" element={<Signup />} />
 
       </Routes>
     </Router>
