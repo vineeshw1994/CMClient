@@ -13,6 +13,8 @@ import { ListMetaCategoryPage } from "./pages/SuperAdmin/ListMetaCategoryPage";
 import SpaCategoryForm from "./components/SuperAdmin/SpaCategoryForm";
 import { CategoryFormPage } from "./pages/SuperAdmin/CategoryFormPage";
 import Login from "./pages/Authentication/Login";
+import Signup from "./pages/Authentication/Signup";
+import OtpPage from "./components/OtpPage/OtpPage";
 
 function App() {
  return(
@@ -36,6 +38,11 @@ function App() {
 
         <Route path="/businessAdmin" element={<BusinessAdmin />} />
         <Route path="/businessCategory/:id" element={<BusinessCategoryForm />} />
+
+
+
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/otp/:userId" element={<OtpPage />} />
 
       </Routes>
     </Router>

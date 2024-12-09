@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
     "font-awesome": "^4.7.0",
     "framer-motion": "^11.13.1",
     "path": "^0.12.7",
