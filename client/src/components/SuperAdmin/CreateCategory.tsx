@@ -47,7 +47,7 @@ const CreateCategory = () => {
     }));
   };
 
-   const handleSubmit = () => {
+   const handleSubmit =async () => {
    
 
     // Construct the column mapping from selected columns and their values
@@ -60,17 +60,24 @@ const CreateCategory = () => {
     const metadataObject = {
       category,
       subcategory,
-      columnMapping, // Constructed columnMapping object
+      columnMapping, 
     };
 
     // Save the metadata to localStorage if category doesn't already exist
-    if (category) {
-      localStorage.setItem(category, JSON.stringify(metadataObject)); // Save the metadata object using the category name as the key
-      console.log('Metadata saved to localStorage:', metadataObject);
-      // You can now optionally navigate, or perform any other actions after saving
-      navigate('/SpaListCategory');
-    } else {
-      alert('Please provide a category name.');
+    try {
+      // Send the metadata to the backend to be appended to metadata.json
+      const response = await axios.post('http://localhost:3000/api/updateMetadata', metadataObject, {
+        withCredentials: true,
+      });
+  
+      if (response.status === 200) {
+        console.log('Metadata successfully updated in metadata.json');
+        // Optionally redirect after successful submission
+        navigate('/SpaListCategory');
+      }
+    } catch (error) {
+      console.error('Error updating metadata:', error);
+      setErrorMessage('Failed to update metadata.');
     }
   };
    
