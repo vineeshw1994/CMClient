@@ -52,6 +52,14 @@ const ListMetaCard = () => {
     }
   };
 
+  const hasColumnValue = (columnMapping) => {
+    // Check if any column in the mapping has a non-empty value
+    return columnMapping.some(item => {
+      const columnName = Object.keys(item)[0];
+      return item[columnName] && item[columnName] !== 'No value assigned';
+    });
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -66,10 +74,11 @@ const ListMetaCard = () => {
         {categories.map((category) => {
           // Safely parse the columnMapping field
           const parsedColumnMapping = parseColumnMapping(category.columnMapping);
+          const shouldNavigateToColumnDataAdd = hasColumnValue(parsedColumnMapping.columnMapping); // Check if any column has a value
 
           return (
             <div key={category.id} className="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col">
-              <Link to={`/spaCategory/${category.id}`}>
+                <Link to={shouldNavigateToColumnDataAdd ? `/spaColumnDataAdd/${category.id}` : `/spaCategory/${category.id}`}>
                 <h2 className="text-xl font-semibold mb-3 text-gray-200">Category: {category.category}</h2>
                 <h3 className="text-md text-gray-400 mb-4">Subcategory: {category.subCategory}</h3>
 

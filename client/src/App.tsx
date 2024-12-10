@@ -17,6 +17,7 @@ import { ProtectedRoute } from "./providers/protected-route";
 import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup";
 import OtpPage from "./components/OtpPage/OtpPage";
+import { CategoryAddDataPage } from "./pages/SuperAdmin/CategoryAddDataPage";
 
 function App() {
  return(
@@ -34,6 +35,7 @@ function App() {
         <Route path="/SpaCreateCategory" element={<CreateCategoryPage/>} />
         <Route path="/SpaListCategory" element={<ListMetaCategoryPage/>} />
          <Route path="/spaCategory/:id" element={<CategoryFormPage/>} />
+         <Route path="spaColumnDataAdd/:id" element={<CategoryAddDataPage/>} />
          </Route>
         
 
