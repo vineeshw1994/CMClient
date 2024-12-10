@@ -31,7 +31,7 @@ const OtpPage = () => {
     try {
       const otpCode = otp.join(""); // Join OTP array into a string
       console.log('Sending OTP for userId:', userId, 'OTP:', otpCode);  // Debugging line
-      const response = await axios.post("http://localhost:4000/api/authentication/verify-otp", {
+      const response = await axios.post("http://localhost:3000/api/authentication/verify-otp", {
         userId,
         otp: otpCode,
       });

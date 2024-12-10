@@ -25,7 +25,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       // Make an axios POST request to the backend
-      const response = await axios.post('http://localhost:4000/api/authentication/signup', formData);
+      const response = await axios.post('http://localhost:3000/api/authentication/signup', formData);
       console.log('Response:', response.data);
       const { userId } = response.data;
       navigate(`/otp/${userId}`); // Use `navigate` instead of `history.push`

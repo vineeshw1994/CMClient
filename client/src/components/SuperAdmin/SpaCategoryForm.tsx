@@ -9,7 +9,7 @@ function SpaCategoryForm() {
   const [formData, setFormData] = useState({}); // Store user input for column names
   const [loading, setLoading] = useState(true);
 
-  // Get category data from localStorage based on the category name (id from params)
+  
   useEffect(() => {
     const categoryData = JSON.parse(localStorage.getItem(id)); // Fetch category data from localStorage using the category name
     if (categoryData && categoryData.columnMapping) {
