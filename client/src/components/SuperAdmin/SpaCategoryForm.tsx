@@ -11,27 +11,35 @@ function SpaCategoryForm() {
 
   
   useEffect(() => {
-    const categoryData = JSON.parse(localStorage.getItem(id)); // Fetch category data from localStorage using the category name
-    if (categoryData && categoryData.columnMapping) {
-      const columnData = Array.isArray(categoryData.columnMapping)
-        ? categoryData.columnMapping
-        : [];
+    const fetchData = async () => {
+      try {
+        // Send the category id to the backend
+        const response = await axios.get(`http://localhost:3000/api/superAdmin/getCategoryData/${id}`);
+        const categoryData = response.data;
+        console.log('cate',categoryData)
+        if (categoryData) {
+          const columnKeys = categoryData.columnMapping.map((column) => Object.keys(column)[0]);
+          setColumns(columnKeys); // Set the column keys to be displayed
 
-      // Extract column keys dynamically
-      const columnKeys = columnData.map((column, index) => Object.keys(column)[0]);
+          // Initialize formData with keys for column names, using the column keys
+          setFormData(
+            columnKeys.reduce((acc, columnKey) => {
+              acc[columnKey] = { name: '' }; // Initialize each column with name only
+              return acc;
+            }, {})
+          );
+        } else {
+          alert('Category not found');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('Error occurred while fetching data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setColumns(columnKeys); // Set the column keys to be displayed
-
-      // Initialize formData with keys for column names, using the column keys
-      setFormData(
-        columnKeys.reduce((acc, columnKey) => {
-          acc[columnKey] = { name: '' }; // Initialize each column with name only
-          return acc;
-        }, {})
-      );
-    }
-
-    setLoading(false);
+    fetchData();
   }, [id]);
 
   // Handle input change for column name
@@ -55,33 +63,23 @@ function SpaCategoryForm() {
       return acc;
     }, []);
 
-    // Get the category and subcategory name from the localStorage data
-    const categoryData = JSON.parse(localStorage.getItem(id));
-    const { category, subcategory } = categoryData || {}; // Assume these are in the localStorage data
-
     // Construct the full data to send to the backend
     const finalData = {
-      category: category, // Include the category name
-      subcategory: subcategory, // Include the subcategory name
+      category: id, // Include the category name (id)
       columnMapping: formattedData, // Include the column mapping (columns with their names)
     };
-    
 
-    // Update the category data in localStorage
-    localStorage.setItem(id, JSON.stringify({ ...categoryData, columnMapping: finalData.columnMapping }));
-
-    // Send data to the backend using axios
+    // Send data to the backend using axios to save the column names
     try {
       const response = await axios.post('http://localhost:3000/api/superAdmin/saveColumnName', finalData); // Replace with your backend URL
       console.log('Data sent to backend successfully:', response.data);
-      alert('Column names updated and sent to backend successfully!');
+      alert('Column names updated and saved successfully!');
     } catch (error) {
       console.error('Error sending data to backend:', error);
       alert('Error occurred while saving data to the backend');
     }
 
-    
-    // navigate('/'); 
+    // navigate('/'); // Optionally navigate after saving
   };
 
   // Loading state

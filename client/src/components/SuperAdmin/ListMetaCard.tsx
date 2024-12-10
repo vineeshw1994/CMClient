@@ -26,6 +26,8 @@ const ListMetaCard = () => {
         });
 
         setCategories(categoriesList); // Set the fetched data to state
+        
+        
       } catch (error) {
         console.error("Error fetching categories:", error);
         setError('Failed to fetch categories'); // Set error message if fetch fails
@@ -54,6 +56,8 @@ const ListMetaCard = () => {
     return <div>Error: {error}</div>;
   }
 
+  console.log('cay', categories);
+
   return (
     <>
       <h1>Categories</h1>
@@ -75,8 +79,12 @@ const ListMetaCard = () => {
                   <ul className="list-disc ml-4 space-y-1">
                     {parsedColumnMapping.columnMapping.map((item, index) => {
                       const columnName = Object.keys(item)[0]; // Get column name (e.g., "Column_2")
+                      const columnValue = item[columnName] || 'No value assigned'; // Get column value, if available
+                      
                       return (
-                        <li key={index} className="text-sm text-gray-300">{columnName}</li>
+                        <li key={index} className="text-sm text-gray-300">
+                          {columnName} - {columnValue}
+                        </li>
                       );
                     })}
                   </ul>
