@@ -1,26 +1,29 @@
 
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function BusinessCategoryListTable() {
   const [categories, setCategories] = useState([]); // To store the fetched categories
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  // Fetch data from backend when component mounts
+  // Fetch data from localStorage when component mounts
   useEffect(() => {
-    axios.get('http://localhost:4000/api/businessAdmin/getCategorylist')
-      .then((response) => {
-        console.log('response.data', response.data);
-        
-        setCategories(response.data); // Store fetched categories in state
-        setLoading(false); // Update loading state
-      })
-      .catch((error) => {
-        console.error('Error fetching categories:', error);
-        setLoading(false); // Stop loading in case of error
-      });
-  }, []);
+    const fetchMetadata = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/businessAdmin/getCategorylist'); // Backend API endpoint
+        setCategories(response.data); // Set the fetched metadata to state
+      } catch (err) {
+        setError('Error fetching metadata');
+        console.error(err);
+      } finally {
+        setLoading(false); // Stop loading after the fetch attempt
+      }
+    };
+
+    fetchMetadata();
+  }, []); // Empty dependency array to run only once on component mount
 
   // Show loading message until data is fetched
   if (loading) {
@@ -39,21 +42,21 @@ function BusinessCategoryListTable() {
           <p className="text-center text-gray-300">No categories available.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <div
-                key={category.id}
+                key={index} // Use index if category id is not available
                 className="bg-gray-700 p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-gray-600"
               >
                 <Link
-                  to={`/businessCategory/${category.id}`}
+                  to={`/businessCategory/${index}`} // Use index for the link, or use category.id if available
                   className="block text-xl font-semibold text-gray-100 mb-4 hover:text-indigo-400 transition-colors duration-300"
                 >
                   {category.category}
                 </Link>
 
                 <h3 className="text-lg text-gray-300 font-medium">{category.category}</h3>
-                {category.subCategory && (
-                  <p className="text-sm text-gray-400 mt-2">Subcategory: {category.subCategory}</p>
+                {category.subcategory && (
+                  <p className="text-sm text-gray-400 mt-2">Subcategory: {category.subcategory}</p>
                 )}
                 {category.columnMapping && (
                   <div className="mt-4">
@@ -67,7 +70,7 @@ function BusinessCategoryListTable() {
                             const columnValue = column[columnKey];
                             return (
                               <li key={index + columnKey}>
-                                <strong>{columnKey}:</strong> 
+                                <strong>{columnKey}:</strong>
                                 {typeof columnValue === 'object' ? (
                                   // If the value is an object, display its inner keys and values
                                   <ul className="ml-4 space-y-1">
@@ -101,5 +104,4 @@ function BusinessCategoryListTable() {
 }
 
 export default BusinessCategoryListTable;
-
 
