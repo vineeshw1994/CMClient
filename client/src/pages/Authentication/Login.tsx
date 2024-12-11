@@ -34,7 +34,7 @@ const Login: React.FC = () => {
     setErrorMessage(null); // Reset previous error message
 
     try {
-      const response = await axios.post('http://localhost:3000/api/authentication/login', formData, { withCredentials: true });
+      const response = await axios.post('http://localhost:4000/api/authentication/login', formData, { withCredentials: true });
       console.log('Login success:', response.data);
 
       if (response && response.data) {
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
 
         const roleToRouteMapping: Record<string, string> = {
           SuperAdmin: '/superAdminDashboard',
-          BusinessUser: "/",
+          BusinessUser: "/businessUserDashboard",
           BusinessAdmin: "/businessAdmin",
           TechnicalAdmin: "/technicalAdminDashboard",
         };
@@ -121,7 +121,7 @@ const Login: React.FC = () => {
                 <option value="SuperAdmin">SuperAdmin</option>
                 <option value="TechnicalAdmin">TechnicalAdmin</option>
                 <option value="BusinessAdmin">Business Admin</option>
-                <option value="BusinessUser">User</option>
+                <option value="BusinessUser">BusinessUser</option>
               </select>
             </div>
 
