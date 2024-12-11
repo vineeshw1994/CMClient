@@ -18,6 +18,9 @@ import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup";
 import OtpPage from "./components/OtpPage/OtpPage";
 import { CategoryAddDataPage } from "./pages/SuperAdmin/CategoryAddDataPage";
+import { UserManagement } from "./components/SuperAdmin/UserManagement";
+import { UserManagementPage } from "./pages/SuperAdmin/UserManagementPage";
+import { ListDatasPage } from "./pages/SuperAdmin/ListDatasPage";
 
 function App() {
  return(
@@ -36,6 +39,8 @@ function App() {
         <Route path="/SpaListCategory" element={<ListMetaCategoryPage/>} />
          <Route path="/spaCategory/:id" element={<CategoryFormPage/>} />
          <Route path="spaColumnDataAdd/:id" element={<CategoryAddDataPage/>} />
+          <Route path="/spaUserManagement" element={<UserManagementPage/>} />
+           <Route path="/spaListDatasPage/:id" element={<ListDatasPage/>} />
          </Route>
         
 

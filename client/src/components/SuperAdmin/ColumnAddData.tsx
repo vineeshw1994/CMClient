@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 
 export const ColumnAddData = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams(); // Get the category ID from URL parameters
   const [categoryData, setCategoryData] = useState(null); // To store category data
   const [inputData, setInputData] = useState([]); // To store user input for the table
@@ -14,7 +16,7 @@ export const ColumnAddData = () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/superAdmin/getCategoryData/${id}`);
         const data = response.data;
-
+        console.log('data',data)
         if (data) {
           setCategoryData(data);
 
@@ -62,7 +64,8 @@ export const ColumnAddData = () => {
       });
 
       console.log('Data saved successfully:', response.data);
-      alert('Data saved successfully!');
+      
+      navigate(`/spaListDatasPage/${id}`)
     } catch (error) {
       console.error('Error saving data:', error);
       alert('Error saving data');
@@ -97,6 +100,8 @@ export const ColumnAddData = () => {
         <div className="text-center">
           <h1 className="text-5xl font-bold text-gray-100">{categoryData.category}</h1>
           <h2 className="text-2xl text-gray-400 mt-2">{categoryData.subcategory}</h2>
+          
+          
         </div>
 
         {/* Table to display column names and user inputs */}

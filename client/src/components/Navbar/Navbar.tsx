@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,9 +12,11 @@ function Navbar() {
       {/* Navbar Container */}
       <nav className="flex justify-between items-center p-5 bg-gray-900 shadow-lg fixed w-full top-0 z-50">
         {/* Logo */}
-        <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-         MasterConfig
+        <Link to="/superAdminDashboard">  {/* Replace "/masterconfig" with your desired route */}
+        <div className="cursor-pointer text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+          MasterConfig
         </div>
+      </Link>
 
         {/* Desktop Navbar Links */}
         <div className="hidden md:flex space-x-8">

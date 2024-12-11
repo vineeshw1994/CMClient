@@ -28,7 +28,7 @@ const Sidebar = () => {
         </button>
         </Link>
 
-        <Link to={"/superAdminDashboard"}>
+        <Link to={"/spaUserManagement"}>
 
         <button 
           className={`w-full text-left py-3 px-4 rounded-lg transition-all duration-200 ease-in-out 
