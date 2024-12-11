@@ -79,7 +79,7 @@ function SpaCategoryForm() {
       alert('Error occurred while saving data to the backend');
     }
 
-    // navigate('/'); // Optionally navigate after saving
+    navigate('/SpaListCategory'); 
   };
 
   // Loading state

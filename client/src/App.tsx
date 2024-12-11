@@ -22,6 +22,7 @@ import BusinessUserCategoryList from "./pages/BusinessUser/BusinessUserCategoryL
 import BusinessUserValueList from "./components/BusinessUser/BusinessUserValueList";
 import BusinessUserListing from "./pages/BusinessUser/BusinessUserListing";
 import BusinessAdminGrid from "./pages/BusinessAdmin/BusinessAdminGrid";
+import { CategoryAddDataPage } from "./pages/SuperAdmin/CategoryAddDataPage";
 
 function App() {
   return (
@@ -34,12 +35,21 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/otp/:userId" element={<OtpPage />} />
 
-            <Route element={<ProtectedRoute allowedRoles={['SuperAdmin']} />}>
-              <Route path="/superAdminDashboard" element={<SuperAdminPage />} />
-              <Route path="/SpaCreateCategory" element={<CreateCategoryPage />} />
-              <Route path="/SpaListCategory" element={<ListMetaCategoryPage />} />
-              <Route path="/spaCategory/:id" element={<CategoryFormPage />} />
-            </Route>
+        <Route element={<ProtectedRoute allowedRoles={['SuperAdmin']} />}>
+        <Route path="/superAdminDashboard" element={<SuperAdminPage/>} />
+        <Route path="/SpaCreateCategory" element={<CreateCategoryPage/>} />
+        <Route path="/SpaListCategory" element={<ListMetaCategoryPage/>} />
+         <Route path="/spaCategory/:id" element={<CategoryFormPage/>} />
+         <Route path="spaColumnDataAdd/:id" element={<CategoryAddDataPage/>} />
+         </Route>
+        
+
+        <Route element={<ProtectedRoute allowedRoles={['TechnicalAdmin']} />}>
+        <Route path="/technicalAdmin" element={<TechnicalAdmin/>} />
+        <Route path="/technicalAdminDashboard" element={<TechnicalDashboard/>} />
+        <Route path="/technicalcategorylist" element={<TechnicalCategoryList/>} />
+        <Route path="/category/:id" element={<CategoryForm />} />
+        </Route>
 
 
             <Route element={<ProtectedRoute allowedRoles={['TechnicalAdmin']} />}>
