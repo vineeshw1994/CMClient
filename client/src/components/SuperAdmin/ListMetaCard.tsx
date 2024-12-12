@@ -5,6 +5,8 @@ import axios from 'axios';
 const ListMetaCard = () => {
   const [categories, setCategories] = useState([]); // Store categories fetched from backend
   const [error, setError] = useState(null); // Store any error that occurs during the fetch
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const [cardsPerPage] = useState(8); // Set the number of cards per page
 
   // Fetch categories from backend on mount
   useEffect(() => {
@@ -26,7 +28,6 @@ const ListMetaCard = () => {
         });
 
         setCategories(categoriesList); // Set the fetched data to state
-        
         
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -60,6 +61,14 @@ const ListMetaCard = () => {
     });
   };
 
+  // Pagination logic
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentCards = categories.slice(indexOfFirstCard, indexOfLastCard);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -71,14 +80,14 @@ const ListMetaCard = () => {
       <h1>Categories</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {/* Render the category cards */}
-        {categories.map((category) => {
+        {currentCards.map((category) => {
           // Safely parse the columnMapping field
           const parsedColumnMapping = parseColumnMapping(category.columnMapping);
           const shouldNavigateToColumnDataAdd = hasColumnValue(parsedColumnMapping.columnMapping); // Check if any column has a value
 
           return (
             <div key={category.id} className="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col">
-                <Link to={shouldNavigateToColumnDataAdd ? `/spaColumnDataAdd/${category.id}` : `/spaCategory/${category.id}`}>
+              <Link to={shouldNavigateToColumnDataAdd ? `/spaColumnDataAdd/${category.id}` : `/spaCategory/${category.id}`}>
                 <h2 className="text-xl font-semibold mb-3 text-gray-200">Category: {category.category}</h2>
                 <h3 className="text-md text-gray-400 mb-4">Subcategory: {category.subCategory}</h3>
 
@@ -102,6 +111,24 @@ const ListMetaCard = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Pagination controls */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-600 text-white rounded-md mr-2"
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage * cardsPerPage >= categories.length}
+          className="px-4 py-2 bg-gray-600 text-white rounded-md"
+        >
+          Next
+        </button>
       </div>
     </>
   );

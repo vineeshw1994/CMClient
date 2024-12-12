@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [active, setActive] = useState(null); // Active state to highlight selected options
+  const navigate=useNavigate()
 
   // Handle setting the active state
   const handleClick = (option:any) => {
     setActive(option);
+    if(option=='Logout'){
+      navigate('/login')
+    }
   };
 
   return (

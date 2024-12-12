@@ -10,6 +10,9 @@ export const ColumnAddData = () => {
   const [inputData, setInputData] = useState([]); // To store user input for the table
   const [loading, setLoading] = useState(true); // To handle loading state
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // To control modal visibility
+  const [file, setFile] = useState(null);
+
   // Fetch category data using the category ID
   useEffect(() => {
     const fetchCategoryData = async () => {
@@ -84,6 +87,36 @@ export const ColumnAddData = () => {
     setInputData([...inputData, newRow]); // Add new row to the inputData state
   };
 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUploadData = async () => {
+    if (!file) {
+      alert("Please select a file to upload");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("categoryId", id); // Add the category ID to the request
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/superAdmin/uploadData', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('File uploaded successfully:', response.data);
+      // Optionally, handle the response (e.g., close modal, show success message)
+      setIsModalOpen(false); // Close modal after upload
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Error uploading data');
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -119,13 +152,25 @@ export const ColumnAddData = () => {
                 })}
                 {/* Empty header cell for the Add button */}
                 <th className="px-6 py-3 text-left text-lg text-gray-300">
-                  <button
-                    onClick={handleAddRow}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                  >
-                    Add Row
-                  </button>
-                </th>
+  <div className="flex space-x-2">
+    {/* Add Row Button */}
+    <button
+      onClick={handleAddRow}
+      className="flex items-center px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none"
+    >
+      <i className="fas fa-plus mr-2"></i> Add Row
+    </button>
+
+    {/* Upload Data Button */}
+    <button
+       onClick={() => setIsModalOpen(true)}
+      className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
+    >
+      <i className="fas fa-upload mr-2"></i> Upload Data
+    </button>
+  </div>
+</th>
+
               </tr>
             </thead>
             <tbody>
@@ -161,6 +206,38 @@ export const ColumnAddData = () => {
           </button>
         </div>
       </div>
+
+
+
+
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-gray-700 p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-2xl text-center text-white mb-4">Upload Excel File</h2>
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleFileChange}
+              className="w-full p-2 rounded-lg bg-gray-800 text-white mb-4"
+            />
+            <div className="flex justify-between">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUploadData}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

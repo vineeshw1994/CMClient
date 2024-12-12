@@ -34,7 +34,7 @@ const Login: React.FC = () => {
     setErrorMessage(null); // Reset previous error message
 
     try {
-      const response = await axios.post('http://localhost:4000/api/authentication/login', formData, { withCredentials: true });
+      const response = await axios.post('http://localhost:3000/api/authentication/login', formData, { withCredentials: true });
       console.log('Login success:', response.data);
 
       if (response && response.data) {
