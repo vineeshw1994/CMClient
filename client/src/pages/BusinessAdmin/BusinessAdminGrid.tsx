@@ -2,7 +2,6 @@ import React from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import BusinessCategoryForm from '../../components/BusinessAdmin/BusinessAddValue'
 import Footer from '../../components/Footer/Footer'
-import BusinessAdminSidebar from '../../components/BusinessAdmin/BusinessAdminSidebar'
 import BusinessAdminSideList from '../../components/BusinessAdmin/BusinessAdminSideList'
 
 function BusinessAdminGrid() {
